@@ -33,8 +33,6 @@ class AsyncSector(object):
     @classmethod
     async def create(cls, session, alarm_id, username, password, version=None):
         """ factory """
-        if version == 'auto':
-            version = await AsyncSector.getapiversion(session)
         self = AsyncSector(session, alarm_id, username, password, version)
         logged_in = await self.login()
 
@@ -43,6 +41,8 @@ class AsyncSector(object):
     def __init__(self, session, alarm_id, username, password, version=None):
         if version is None:
             version = AsyncSector.Version
+        if version == 'auto':
+            version = await AsyncSector.getapiversion(session)
         self.alarm_id = alarm_id
         self._session = session
         self._auth = {'userID': username, 'password': password}
